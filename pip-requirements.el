@@ -44,7 +44,7 @@
 (require 'cl-lib)
 
 (defgroup pip-requirements nil
-  "Requirements files for pip"
+  "Requirements files for pip."
   :prefix "pip-requirements-"
   :group 'languages
   :link '(url-link :tag "Github" "https://github.com/Wilfred/pip-requirements.el"))
@@ -60,6 +60,21 @@
   "The URL used to fetch the list of packages used for completion."
   :group 'pip-requirements
   :type 'string)
+
+(defface pip-requirements-name-regex-face
+  '((t (:inherit font-lock-variable-name-face)))
+  ""
+  :group 'pip-requirements)
+
+(defface pip-requirements-version-regex-1-face
+  '((t (:inherit font-lock-builtin-face)))
+  ""
+  :group 'pip-requirements)
+
+(defface pip-requirements-version-regex-2-face
+  '((t (:inherit font-lock-constant-face)))
+  ""
+  :group 'pip-requirements)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist
@@ -87,13 +102,12 @@
   ;; https://www.python.org/dev/peps/pep-0440/#arbitrary-equality
   (rx (group "===") (group (1+ not-newline))))
 
-(defconst pip-requirements-operators
-  (list
-   (list pip-requirements-name-regex 1 'font-lock-variable-name-face)
-   (list pip-requirements-version-regex 1 'font-lock-builtin-face)
-   (list pip-requirements-arbitrary-version-regex 1 'font-lock-builtin-face)
-   (list pip-requirements-version-regex 2 'font-lock-constant-face)
-   (list pip-requirements-arbitrary-version-regex 2 'font-lock-constant-face)))
+(defvar pip-requirements-operators
+  `((,pip-requirements-name-regex 1 'pip-requirements-name-regex-face)
+    (,pip-requirements-version-regex 1 'pip-requirements-version-regex-1-face)
+    (,pip-requirements-arbitrary-version-regex 1 'pip-requirements-version-regex-1-face)
+    (,pip-requirements-version-regex 2 'pip-requirements-version-regex-2-face)
+    (,pip-requirements-arbitrary-version-regex 2 'pip-requirements-version-regex-2-face)))
 
 (defconst pip-requirements-syntax-table
   (let ((table (make-syntax-table)))
